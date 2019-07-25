@@ -178,10 +178,10 @@ class AutoDeeplab (nn.Module) :
             if layer == 0 :
                 level4_new = self.cells[count] (None, self.level_4[-1], normalized_alphas)
                 count += 1
-                self.level_4.append(level4_new * normalized_betas[layer][0][0])
-
                 level8_new = self.cells[count] (None, self.level_4[-1], normalized_alphas)
                 count += 1
+
+                self.level_4.append(level4_new * normalized_betas[layer][0][0])
                 self.level_8.append (level8_new * normalized_betas[layer][0][1])
 
             elif layer == 1 :
