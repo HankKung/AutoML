@@ -170,8 +170,9 @@ class AutoDeeplab (nn.Module) :
         count = 0
         img_device = torch.device('cuda', x.get_device())
         self.alphas_cell = self.alphas_cell.to(device=img_device)
-        normalized_betas = self.normalized_betas.to(device=img_device)
+        self.betas_network = self.betas_network.to(device=img_device)
         normalized_alphas = F.softmax(self.alphas_cell, dim=-1)
+        normalized_betas = F.softmax (self.betas_network, dim = -1)
         for layer in range (self._num_layers) :
 
             if layer == 0 :
@@ -331,10 +332,10 @@ class AutoDeeplab (nn.Module) :
         num_ops = len(PRIMITIVES)
         self.alphas_cell = torch.tensor (1e-3*torch.randn(k, num_ops).cuda(), requires_grad=True)
         self.betas_network = torch.tensor (1e-3 * torch.randn(self._num_layers, 4, 3).cuda(), requires_grad=True)
-        self.normalized_betas = F.softmax(self.betas_network, dim=-1)
+
         self._arch_parameters = [
             self.alphas_cell,
-            self.normalized_betas,
+            self.betas_network,
         ]
 
     def decode_network (self) :
